@@ -1,5 +1,6 @@
 const { ministerioUrl } = require("../config/dependencies.config");
 const ministerioCli = require("dacs-integrador-g5");
+const { ReporteMensual } = require("../models/mongoose");
 
 class EmpresaRepository {
 
@@ -32,8 +33,6 @@ class EmpresaRepository {
         email,
         secret,
       );
-      console.log("TOKENARDO!")
-      console.log(token);
       if (token) {
         return respuesta = await ministerioCli.getReportesMinisterio(
           urlReports,
@@ -51,10 +50,11 @@ class EmpresaRepository {
    * @param {*} reporteMensual 
    * @returns 
    */
-  async sendReportes(email, secret, reporteMensual) {
+  async sendReportes(email, secret, reporte) {
     const urlLogin = ministerioUrl + "/api/login";
     const urlReports = ministerioUrl + "/api/reports";
     let respuesta = [];
+    
     try {
       const token = await ministerioCli.iniciarSesionMinisterio(
         urlLogin,
@@ -64,7 +64,7 @@ class EmpresaRepository {
       if (token) {
         respuesta = await ministerioCli.sendReportesAlMinisterio(
           urlReports,
-          reporteMensual,
+          reporte,
           token
         )
       }
@@ -73,6 +73,12 @@ class EmpresaRepository {
       console.log(error);
       return error;
     }
+  }
+
+  async saveReporte(reporte) {
+    const reporteMensual = new ReporteMensual(reporte);
+    await reporteMensual.save();
+    return reporte;
   }
 
 }

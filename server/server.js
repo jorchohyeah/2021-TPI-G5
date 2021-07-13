@@ -7,7 +7,6 @@ swaggerDocument = require('./swagger.json');
 const port = process.env.PORT;
 
 // ROUTES
-const externalRoutes = require("./routes/externalRoutes");
 const ventaRoutes = require("./routes/ventasRoutes");
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
@@ -58,7 +57,6 @@ mongoose
 
 // ROUTES BINDING
 // app.use("/api", require("./routes/index"));
-app.use("/", externalRoutes);
 app.use("/", ventaRoutes);
 
 // routes auth

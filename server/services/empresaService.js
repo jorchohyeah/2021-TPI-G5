@@ -1,5 +1,4 @@
 const { EmpresaRepository, SecretariaRepository } = require("../repository");
-const { ReporteMensual } = require("../models/mongoose/index");
 
 const empresaRepository = new EmpresaRepository();
 const secretariaRepository = new SecretariaRepository();
@@ -11,6 +10,7 @@ class EmpresaService {
      * @returns empresaRegistered
      */
     async registerEmpresa(infoEmpresa) {
+        validatorReLoco(infoEmpresa);
         const response = await empresaRepository.registerEmpresa(infoEmpresa);
         return response;
     }
@@ -20,6 +20,7 @@ class EmpresaService {
      * @returns 
      */
     async getAllReportes(email, secret) {
+        
         const reportes = await empresaRepository.getReportes(email, secret);
         return reportes;
     }
@@ -31,6 +32,7 @@ class EmpresaService {
      */
     async addNewReporte(email, secret, reporte) {
         let response;
+        await empresaRepository.saveReporte(reporte);
         let listaRegistroOk = reporte.listaRegistro.map(element => {
             return {
                 denominacion: element.denominacion,
